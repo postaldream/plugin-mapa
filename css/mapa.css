@@ -1,0 +1,1157 @@
+#mapa-interactivo {
+    width: 100%;
+    height: 500px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    margin-bottom: 1em;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* --- CONTENEDOR CENTRAL GRIS --- */
+.bloque-central {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 20px;
+    background: #f4f6fa;
+    border-radius: 18px;
+    box-sizing: border-box;
+}
+
+/* --- FORMULARIO IGUAL QUE EL RESTO (ancho completo dentro del bloque central) --- */
+#formulario-marcador {
+    background: #fff;
+    border-radius: 12px;
+    margin: 2em 0 1em 0;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.10);
+    box-sizing: border-box;
+    width: 100%;
+    padding: 2em 0;
+    position: relative;
+    z-index: 2;
+    display: block;
+}
+#formulario-marcador > * {
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+@media (max-width: 1100px) {
+    .bloque-central, #formulario-marcador {
+        max-width: 100%;
+    }
+}
+
+@media (max-width: 800px) {
+    .bloque-central, #formulario-marcador {
+        max-width: 100%;
+        padding: 1em 0.3em;
+        border-radius: 0;
+    }
+    #formulario-marcador > * {
+        padding-left: 0.3em;
+        padding-right: 0.3em;
+    }
+}
+
+#formulario-marcador label {
+    color: #222;
+    display: block;
+    margin-bottom: 0.5em;
+    font-weight: bold;
+}
+#formulario-marcador input[type="text"],
+#formulario-marcador input[type="number"],
+#formulario-marcador textarea,
+#formulario-marcador select,
+#categoria-selector,
+select {
+    width: 100%;
+    padding: 0.5em;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    font-size: 16px;
+    box-sizing: border-box;
+    margin-bottom: 1em;
+    background: #fafdff;
+    color: #444;
+}
+
+#formulario-marcador input:focus,
+#formulario-marcador select:focus,
+#formulario-marcador textarea:focus {
+    border: 1.7px solid #3ba1da;
+    box-shadow: 0 2px 10px rgba(59,161,218,0.04);
+}
+
+/* --- BOTONES ESTILO GRADIENTE --- */
+.categoria-btn, 
+#mostrar-formulario-btn, 
+#guardar-marcador-btn {
+    background: linear-gradient(90deg, #3ba1da 0%, #15418a 100%);
+    color: #fff;
+    border: none;
+    padding: 15px 38px;
+    border-radius: 8px;
+    font-size: 20px;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 4px 14px rgba(21,65,138,0.18);
+    margin-bottom: 8px;
+    transition: background 0.3s, transform 0.2s, box-shadow 0.3s;
+    display: inline-block;
+}
+.categoria-btn:hover,
+#mostrar-formulario-btn:hover,
+#guardar-marcador-btn:hover {
+    background: linear-gradient(90deg, #15418a 0%, #3ba1da 100%);
+    transform: scale(1.06);
+    box-shadow: 0 6px 20px rgba(21,65,138,0.25);
+}
+.categoria-btn:focus,
+#mostrar-formulario-btn:focus,
+#guardar-marcador-btn:focus {
+    outline: 3px solid #ffd700;
+}
+
+#categoria-botones {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    justify-content: center;
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+@media (max-width: 600px) {
+    #categoria-botones { flex-direction: column; align-items: center; }
+    .categoria-btn { width: 100%; }
+    #mapa-interactivo { height: 400px; }
+}
+
+/* --- INSTRUCCIONES USUARIO EN PAGINA DE PROVINCIA --- */
+.mapa-instrucciones-usuario {
+  background: linear-gradient(90deg, #eaf6ff 0%, #f9fcff 100%);
+  border: 2px solid #3ba1da;
+  border-radius: 10px;
+  box-shadow: 0 2px 18px rgba(59,161,218,0.07);
+  padding: 18px 20px 14px 20px;
+  margin: 0 0 22px 0;
+  width: 100%;
+  font-size: 1.09em;
+  box-sizing: border-box;
+}
+.mapa-instrucciones-titulo {
+  color: #15418a;
+  font-size: 1.19em;
+  font-weight: bold;
+  margin-bottom: 7px;
+  letter-spacing: .5px;
+  text-align: center;
+}
+.mapa-instrucciones-lista {
+  margin: 0 0 7px 20px;
+  padding: 0;
+}
+.mapa-instrucciones-lista li {
+  margin-bottom: 4px;
+  line-height: 1.32;
+}
+.mapa-instrucciones-tip {
+  background: #d5f2e3;
+  color: #176ab5;
+  border-radius: 7px;
+  margin-top: 9px;
+  padding: 8px 13px;
+  font-size: 0.98em;
+  text-align: center;
+}
+
+/* --- LISTA DE MARCADORES --- */
+#lista-marcadores {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+    padding: 0;
+    list-style: none;
+}
+#lista-marcadores li {
+    padding: 10px 14px;
+    background-color: #005f8a;
+    color: white;
+    border-radius: 6px;
+    cursor: pointer;
+    word-wrap: break-word;
+    white-space: normal;
+    flex: 1 1 250px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    text-align: center;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
+}
+#lista-marcadores li:hover {
+    background-color: #003f5c;
+    transform: scale(1.05);
+}
+
+.gm-style img[src*="mapfiles/ms/icons/"] {
+    width: 30px !important;
+    height: 30px !important;
+}
+.gm-style img {
+    display: block !important;
+}
+
+#lista-marcadores button {
+    margin: 4px 6px 0;
+    padding: 4px 8px;
+    font-size: 14px;
+    border: none;
+    border-radius: 4px;
+    background: #ffffff33;
+    color: #fff;
+    cursor: pointer;
+}
+#lista-marcadores button:hover { background: #ffffff66; }
+
+/* --- ÚLTIMOS MARCADORES --- */
+#ultimos-marcadores {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    background: #fafafa;
+}
+#ultimos-marcadores li {
+    padding: 8px 10px;
+    border-bottom: 1px solid #eee;
+    transition: background 0.2s ease;
+    cursor: pointer;
+    font-size: 0.95rem;
+}
+#ultimos-marcadores li:last-child { border-bottom: none; }
+#ultimos-marcadores li:hover { background: #f0f8ff; }
+#ultimos-marcadores li:active { background: #e6f4ff; }
+
+/* --- BOTÓN MENSAJE PRIVADO --- */
+.detalle-marcador-btn-profile,
+.principal-btn,
+.bettermessages-pm-button,
+a.bettermessages-pm-button,
+button.bettermessages-pm-button {
+    background: linear-gradient(90deg, #3ba1da 0%, #15418a 100%) !important;
+    color: #fff !important;
+    border: none !important;
+    border-radius: 8px !important;
+    font-weight: 600 !important;
+    box-shadow: 0 4px 14px rgba(21,65,138,0.18) !important;
+    padding: 12px 22px !important;
+    font-size: 1.08em !important;
+    margin: 0 0 8px 0 !important;
+    display: inline-block !important;
+    cursor: pointer !important;
+    text-decoration: none !important;
+    transition: background 0.3s, transform 0.2s, box-shadow 0.3s !important;
+    vertical-align: middle !important;
+}
+.detalle-marcador-btn-profile:hover,
+.principal-btn:hover,
+.bettermessages-pm-button:hover,
+a.bettermessages-pm-button:hover,
+button.bettermessages-pm-button:hover {
+    background: linear-gradient(90deg, #15418a 0%, #3ba1da 100%) !important;
+    transform: scale(1.06);
+    box-shadow: 0 6px 20px rgba(21,65,138,0.25) !important;
+}
+
+@media (max-width: 600px) {
+    .detalle-marcador-btn-profile,
+    .principal-btn,
+    .bettermessages-pm-button,
+    a.bettermessages-pm-button,
+    button.bettermessages-pm-button {
+        width: 100% !important;
+        padding: 12px 0 !important;
+        margin-bottom: 8px !important;
+        font-size: 1.15em !important;
+        box-sizing: border-box !important;
+        min-height: 48px !important;
+        height: auto !important;
+        display: block !important;
+        text-align: center !important;
+        align-items: center !important;
+    }
+}
+
+/* --- MIS MARCADORES --- */
+.mis-marcs-title {
+    color: #15418a;
+    font-size: 1.2em;
+    margin-bottom: 10px;
+    text-align: left;
+}
+.mis-marcs-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+.mis-marcs-list li {
+    background: #fff;
+    border: 1px solid #e2e2e2;
+    border-radius: 7px;
+    margin-bottom: 12px;
+    padding: 16px 13px 13px 13px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    font-size: 1em;
+}
+.mis-marcs-list .marcador-btns {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+.mis-marcs-list button {
+    padding: 7px 14px;
+    border-radius: 5px;
+    border: none;
+    font-weight: 600;
+    font-size: 0.95em;
+    cursor: pointer;
+    background: #3ba1da;
+    color: #fff;
+    transition: background 0.2s;
+}
+.mis-marcs-list button.eliminar { background: #e74c3c; }
+.mis-marcs-list button.editar { background: #15418a; }
+
+@media (max-width: 600px) {
+    #mis-marcadores-contenedor { margin: 18px 0; }
+    .mis-marcs-list li { padding: 13px 7px 10px 7px; font-size: 0.98em; }
+    .mis-marcs-list .marcador-btns { flex-direction: column; gap: 7px; }
+    .mis-marcs-list button { width: 100%; font-size: 1em; }
+}
+
+/* --- BLOQUES DE ANUNCIOS PROVINCIA --- */
+.mini-anuncios-provincia-milanuncios {
+    background: #f9fbfe;
+    border-radius: 13px;
+    padding: 24px 18px 15px 18px;
+    margin: 30px 0 20px 0;
+    box-shadow: 0 3px 18px #cde2ff55;
+}
+.mini-anuncios-provincia-title {
+    color: #2176bd;
+    font-size: 1.19em;
+    font-weight: 700;
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    margin-bottom: 18px;
+}
+.mini-anuncios-cards {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+.mini-anuncio-card {
+    flex: 1 1 240px;
+    max-width: 320px;
+    min-width: 200px;
+    background: #fff;
+    border: 1.5px solid #bbe0fe;
+    padding: 17px 18px 12px 18px;
+    border-radius: 10px;
+    box-shadow: 0 1px 7px #d2e8ff44;
+    text-decoration: none;
+    color: #123;
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    transition: box-shadow .18s, border-color .18s, transform .15s;
+    position: relative;
+}
+.mini-anuncio-card:hover {
+    box-shadow: 0 7px 28px #bedcff77;
+    background: linear-gradient(90deg, #e6f1ff 60%, #f6fbff 100%);
+    border-color: #72b4e9;
+    transform: translateY(-2px) scale(1.03);
+    z-index: 2;
+}
+.mini-anuncio-precio {
+    font-size: 1.35em;
+    color: #176ab5;
+    font-weight: 900;
+    margin-right: 10px;
+    letter-spacing: 0.5px;
+}
+/* Avatar grande centrado arriba */
+.mini-anuncio-avatar {
+    width: 68px;
+    height: 68px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2.5px solid #bbe0fe;
+    box-shadow: 0 2px 7px #d2e8ff33;
+    margin-bottom: 10px;
+    margin-top: 4px;
+    display: block;
+    background: #eaf6ff;
+}
+/* Quitar subrayado de todo el contenido clicable */
+.mini-anuncio-card,
+.mini-anuncio-card *,
+.mini-anuncio-card:visited {
+    text-decoration: none !important;
+}
+.emoji-marcador {
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    margin-bottom: 8px;
+}
+.google-pin-icon {
+    width: 34px;
+    height: 34px;
+    vertical-align: middle;
+    transition: transform 0.08s;
+}
+.emoji-marcador:hover .google-pin-icon {
+    transform: scale(1.25);
+}
+.mini-anuncio-ciudad {
+    color: #1976d2;
+    font-size: 1em;
+    font-weight: 600;
+    margin-left: 6px;
+}
+.mini-anuncio-detalles {
+    color: #357;
+    font-size: 1.07em;
+    font-weight: 500;
+    display: flex;
+    gap: 13px;
+    margin-bottom: 2px;
+}
+.mini-anuncio-comentario {
+    color: #444;
+    font-size: 1em;
+    min-height: 36px;
+}
+.mini-anuncio-ref {
+    color: #8bb;
+    font-size: 0.93em;
+    margin-top: 4px;
+    display: block;
+}
+@media (max-width: 700px) {
+    .mini-anuncios-cards { flex-direction: column; gap: 15px;}
+    .mini-anuncio-card { max-width: 100%; min-width: 0;}
+    .mini-anuncio-avatar { margin: 0 auto 14px auto; display: block; }
+}
+
+/* --- BLOQUE FORMULARIO POSTALDREAM --- */
+.pd-add-marcador-wrap {
+  max-width: 470px;
+  margin: 30px auto 0 auto;
+  background: #fff;
+  border-radius: 28px;
+  box-shadow: 0 4px 42px rgba(0,0,0,0.11);
+  padding: 28px 32px 18px 32px;
+}
+.pd-btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: linear-gradient(90deg,#00c3ff 0%,#004e92 100%);
+  color: #fff;
+  padding: 14px 38px;
+  border-radius: 30px;
+  border: none;
+  font-size: 1.1em;
+  font-weight: 700;
+  font-family: 'Montserrat', Arial, sans-serif;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.09);
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.2s;
+}
+.pd-btn-primary:hover {
+  background: linear-gradient(90deg,#004e92 0%,#00c3ff 100%);
+  transform: translateY(-2px) scale(1.04);
+}
+.pd-btn-icon {
+  font-size: 1.28em;
+  font-weight: 900;
+  margin-right: 6px;
+  margin-left: 2px;
+}
+
+.pd-form-marcador { margin-top: 28px; }
+.pd-form-group { margin-bottom: 17px; }
+.pd-label {
+  font-weight: 700;
+  font-size: 1.04em;
+  margin-bottom: 6px;
+  display: block;
+  color: #00335c;
+  font-family: 'Montserrat', Arial, sans-serif;
+}
+.pd-input, .pd-form-marcador select, .pd-form-marcador textarea {
+  width: 100%;
+  border-radius: 19px;
+  border: 1.7px solid #e6ecf3;
+  background: #fafdff;
+  font-size: 1em;
+  font-family: 'Montserrat', Arial, sans-serif;
+  padding: 12px 17px;
+  margin-bottom: 3px;
+  transition: border 0.2s, box-shadow 0.2s;
+  color: #00335c;
+  box-sizing: border-box;
+  outline: none;
+}
+.pd-input:focus, .pd-form-marcador select:focus, .pd-form-marcador textarea:focus {
+  border: 1.7px solid #00c3ff;
+  box-shadow: 0 2px 12px rgba(0,195,255,0.05);
+}
+.pd-form-marcador textarea { min-height: 48px; resize: vertical; }
+
+/* --- BLOQUE PUBLICA TU BUSQUEDA --- */
+.pd-publica-wrap {
+  max-width: 540px;
+  margin: 25px auto 38px auto;
+  background: #fff;
+  border-radius: 30px;
+  box-shadow: 0 6px 38px 0 rgba(0,76,207,0.13);
+  padding: 32px 38px 24px 38px;
+  font-family: 'Montserrat', Arial, sans-serif;
+  position: relative;
+  text-align: center;
+}
+.pd-publica-titulo {
+  font-size: 1.32em;
+  font-weight: 800;
+  color: #004e92;
+  margin-bottom: 8px;
+  letter-spacing: -1px;
+}
+.pd-publica-desc {
+  font-size: 1.09em;
+  color: #00335c;
+  margin-bottom: 14px;
+}
+.pd-btn-center-wrap {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  margin: 0 auto 0 auto;
+}
+.pd-btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: linear-gradient(90deg,#00c3ff 0%,#004e92 100%);
+  color: #fff;
+  padding: 14px 38px;
+  border-radius: 31px;
+  border: none;
+  font-size: 1.13em;
+  font-weight: 700;
+  font-family: 'Montserrat', Arial, sans-serif;
+  box-shadow: 0 4px 24px rgba(0,76,207,0.09);
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  transition: background 0.18s, transform 0.18s;
+  text-decoration: none;
+  justify-content: center;
+}
+.pd-btn-primary:hover {
+  background: linear-gradient(90deg,#004e92 0%,#00c3ff 100%);
+  transform: translateY(-2px) scale(1.04);
+}
+
+.pd-cta-top {
+  background: #f2f9fd;
+  color: #155088;
+  padding: 18px 20px;
+  margin: 25px 0 15px 0;
+  border-radius: 10px;
+  border: 2px solid #3ba1da;
+  font-size: 1.18em;
+  font-weight: 500;
+  text-align: center;
+  width: 100%;
+  box-sizing: border-box;
+  box-shadow: 0 4px 18px rgba(50,100,200,0.06);
+  display: block;
+}
+
+.pd-cta-top b {
+  color: #15418a;
+}
+
+/* BLOQUE CENTRADO DE TEXTO + BOTÓN DEBAJO DEL MAPA */
+.pd-cta-bloque-anuncio {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 13px;
+  margin: 22px 0 18px 0;
+  text-align: center;
+}
+.pd-cta-bloque-anuncio-top,
+.pd-cta-bloque-anuncio-bottom {
+  font-size: 1.20em;
+  font-weight: 700;
+  color: #15418a;
+  font-family: 'Montserrat', Arial, sans-serif;
+  margin: 0.5em 0 0.5em 0;
+  text-shadow: none;
+}
+
+/* BOTÓN AZUL CON ESTRELLA QUE CAMBIA DE COLOR AL HOVER */
+@keyframes estrella-multicolor {
+  0%,100%   { color: #ffd700; }  /* Amarillo dorado */
+  18%       { color: #3ba1da; }  /* Azul */
+  36%       { color: #e74c3c; }  /* Rojo */
+  54%       { color: #27ae60; }  /* Verde */
+  72%       { color: #8f44fd; }  /* Morado */
+  88%       { color: #ffd700; }
+}
+
+/* Botón base, sin animación por defecto */
+.pd-btn-anuncio-azul-contorno {
+  border: 2.5px solid #3ba1da;
+  background: linear-gradient(90deg, #3ba1da 0%, #15418a 100%);
+  color: #fff;
+  font-weight: 800;
+  position: relative;
+  transition: background 0.22s, color 0.22s, box-shadow 0.22s, transform 0.15s, border-color 0.25s;
+  box-shadow: 0 1px 3px #3ba1da11;
+  overflow: hidden;
+}
+.pd-btn-anuncio-azul-contorno .pd-btn-icon {
+  color: #ffd700; /* color inicial de la estrella */
+  transition: color 0.3s;
+}
+
+/* Al pasar el ratón, la estrella anima los colores */
+.pd-btn-anuncio-azul-contorno:hover .pd-btn-icon,
+.pd-btn-anuncio-azul-contorno:focus .pd-btn-icon {
+  animation: estrella-multicolor 3.6s linear infinite;
+}
+.pd-btn-anuncio-azul-contorno:hover,
+.pd-btn-anuncio-azul-contorno:focus {
+  background: linear-gradient(90deg, #15418a 0%, #3ba1da 100%);
+  color: #ffd700;
+  box-shadow: 0 8px 28px #ffd70033, 0 0 14px 4px #3ba1da77;
+  transform: scale(1.045);
+}
+
+.mini-anuncio-card {
+    position: relative;
+}
+.corazon-favorito {
+    position: absolute;
+    top: 13px;
+    right: 14px;
+    font-size: 1.8em;
+    color: #bbb;
+    cursor: pointer;
+    z-index: 10;
+    transition: color 0.22s;
+    user-select: none;
+}
+.corazon-favorito.activo {
+    color: #e74c3c;
+}
+.corazon-favorito:hover,
+.corazon-favorito:focus {
+    color: #ff3b3b;
+    text-shadow: 0 2px 8px #e74c3c55;
+}
+.corazon-favorito {
+    padding: 3px 8px;
+    border-radius: 50%;
+}
+
+.pd-form-marcador select,
+select.pd-input {
+  min-height: 48px;
+  line-height: 1.5;
+  padding-top: 12px;
+  padding-bottom: 12px;
+  vertical-align: middle;
+}
+
+html, body, *, *::before, *::after {
+  box-sizing: border-box !important;
+}
+body, html {
+  width: 100% !important;
+  max-width: 100vw !important;
+  overflow-x: hidden !important;
+  margin: 0 !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+
+/* Asegura que el contenedor de los anuncios y sus padres no tengan desplazamiento */
+.mini-anuncios-provincia-milanuncios,
+.mini-anuncios-cards {
+  position: relative !important;
+  margin: 0 auto !important;
+  left: 0 !important;
+  right: 0 !important;
+  width: 100% !important;
+  max-width: 1100px !important;
+  box-sizing: border-box !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  overflow-x: visible !important;
+}
+
+/* Fuerza que el minianuncio esté alineado y contenido */
+.mini-anuncio-card {
+  position: relative !important;
+  margin: 0 !important;
+  margin-bottom: 1.5em !important;
+  left: 0 !important;
+  right: 0 !important;
+  width: 100% !important;
+  max-width: 320px !important;
+  box-sizing: border-box !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: stretch !important;
+  justify-content: space-between !important;
+  background: #fff !important;
+}
+
+/* Responsive: móvil */
+@media (max-width: 700px) {
+  .mini-anuncios-provincia-milanuncios,
+  .mini-anuncios-cards {
+    max-width: 100vw !important;
+    width: 100vw !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+  .mini-anuncio-card {
+    max-width: 98vw !important;
+    width: 98vw !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    left: 0 !important;
+    right: 0 !important;
+  }
+}
+
+html, body, *, *::before, *::after {
+  box-sizing: border-box !important;
+}
+.mini-anuncios-provincia-milanuncios,
+.mini-anuncios-cards {
+  max-width: 100% !important;
+  width: 100% !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  overflow-x: visible !important;
+}
+.mini-anuncios-cards {
+  min-width: 0 !important;
+}
+.mini-anuncio-card {
+  max-width: 100% !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  overflow-x: visible !important;
+  box-sizing: border-box !important;
+  display: block !important;
+  float: none !important;
+}
+
+@media (max-width: 700px) {
+  .mini-anuncios-provincia-milanuncios,
+  .mini-anuncios-cards,
+  .mini-anuncio-card {
+    max-width: 100% !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    box-sizing: border-box !important;
+    overflow-x: visible !important;
+  }
+  .mini-anuncio-card {
+    display: block !important;
+    float: none !important;
+  }
+}
+
+.mini-anuncio-card {
+  padding-left: 16px !important;
+  padding-right: 16px !important;
+  /* Conserva el padding vertical habitual */
+  padding-top: 17px !important;
+  padding-bottom: 12px !important;
+}
+
+/* Opcional: más aire en móvil */
+@media (max-width: 700px) {
+  .mini-anuncio-card {
+    padding-left: 12px !important;
+    padding-right: 12px !important;
+    padding-top: 14px !important;
+    padding-bottom: 10px !important;
+  }
+}
+
+#mapa-interactivo {
+    width: 100%;
+    height: 500px;
+    border: 1px solid #ccc;
+    border-radius: 14px;
+    margin-bottom: 1em;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 0;
+    display: block;
+}
+
+.mapa-interactivo-wrapper {
+    box-shadow:
+      0 4px 16px rgba(30, 64, 175, 0.18),
+      0 14px 38px rgba(0,0,0,0.22);
+    border-radius: 14px;
+    border: 1.5px solid #eee;
+    background: #fff;
+    margin: 18px 0 20px 0;
+    overflow: hidden;
+    width: 100%;
+    max-width: 100%;
+}
+
+.mini-anuncio-card-link {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+}
+.mini-anuncio-card-link .mini-anuncio-card {
+  cursor: pointer;
+}
+.mini-anuncio-card-link .mini-anuncio-card:hover {
+  box-shadow: 0 2px 12px rgba(59,161,218,0.25);
+  background: #eef8ff;
+  transition: box-shadow 0.2s, background 0.2s;
+}
+
+.mini-anuncios-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 22px;
+  width: 100%;
+  max-width: 1100px;
+  margin: 0 auto 30px auto;
+  box-sizing: border-box;
+  justify-items: stretch;
+  align-items: stretch;
+  padding: 0;
+}
+.mini-anuncio-card {
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 2px 14px rgba(59,161,218,0.13);
+  border: 1.5px solid #bbe0fe;
+  padding: 17px 18px 12px 18px;
+  text-decoration: none;
+  color: #123;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  transition: box-shadow .18s, border-color .18s, transform .15s;
+  position: relative;
+  min-width: 0;
+  max-width: 310px;
+  width: 100%;
+  margin: 0 auto;
+  box-sizing: border-box;
+}
+.mini-anuncio-card:hover {
+  box-shadow: 0 7px 28px #bedcff77;
+  background: linear-gradient(90deg, #e6f1ff 60%, #f6fbff 100%);
+  border-color: #72b4e9;
+  transform: translateY(-2px) scale(1.03);
+  z-index: 2;
+}
+.corazon-favorito {
+  position: absolute;
+  top: 13px;
+  right: 14px;
+  font-size: 1.8em;
+  color: #bbb;
+  cursor: pointer;
+  z-index: 10;
+  transition: color 0.22s;
+  user-select: none;
+  padding: 3px 8px;
+  border-radius: 50%;
+}
+.corazon-favorito.activo { color: #e74c3c; }
+.corazon-favorito:hover,
+.corazon-favorito:focus { color: #ff3b3b; text-shadow: 0 2px 8px #e74c3c55; }
+.mini-anuncio-avatar {
+  width: 68px;
+  height: 68px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2.5px solid #bbe0fe;
+  box-shadow: 0 2px 7px #d2e8ff33;
+  margin-bottom: 10px;
+  margin-top: 4px;
+  background: #eaf6ff;
+}
+.emoji-marcador {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  margin-bottom: 8px;
+  display: inline-block;
+}
+.google-pin-icon {
+  width: 34px;
+  height: 34px;
+  vertical-align: middle;
+  transition: transform 0.08s;
+  display: inline-block;
+}
+.emoji-marcador:hover .google-pin-icon { transform: scale(1.25); }
+.mini-anuncio-titulo {
+  font-size: 1.07em;
+  font-weight: 600;
+  color: #16408b;
+  text-align: center;
+  margin-bottom: 2px;
+  line-height: 1.3em;
+  word-break: break-word;
+  hyphens: auto;
+}
+.mini-anuncio-precio {
+  font-size: 1.15em;
+  color: #176ab5;
+  font-weight: 900;
+  margin-right: 10px;
+  letter-spacing: 0.5px;
+  text-align: center;
+  margin-bottom: 7px;
+}
+.mini-anuncio-ciudad {
+  color: #1976d2;
+  font-size: 1em;
+  font-weight: 600;
+  margin-left: 6px;
+  margin-bottom: 4px;
+  text-align: center;
+}
+.mini-anuncio-detalles {
+  color: #357;
+  font-size: 1.07em;
+  font-weight: 500;
+  display: flex;
+  gap: 13px;
+  margin-bottom: 2px;
+  justify-content: center;
+}
+.mini-anuncio-comentario {
+  color: #444;
+  font-size: 1em;
+  min-height: 36px;
+  text-align: center;
+}
+@media (max-width: 900px) {
+  .mini-anuncios-cards {
+    grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+    gap: 15px;
+    max-width: 99vw;
+  }
+  .mini-anuncio-card {
+    padding: 14px 10px 10px 10px;
+    max-width: 99vw;
+  }
+}
+@media (max-width: 600px) {
+  .mini-anuncios-cards {
+    grid-template-columns: 1fr;
+    gap: 10px;
+    max-width: 99vw;
+  }
+  .mini-anuncio-card {
+    padding: 10px 5px;
+    max-width: 99vw;
+  }
+  .mini-anuncio-avatar { width: 48px; height: 48px; }
+}
+
+.bloque-central, .ast-container, .container {
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  max-width: 100vw !important;
+  box-sizing: border-box !important;
+}
+
+.mini-anuncios-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 22px;
+  max-width: 1100px;
+  margin: 0 auto 30px auto;
+  width: 100%;
+  box-sizing: border-box;
+  justify-items: stretch;
+  align-items: stretch;
+  padding: 0;
+}
+.mini-anuncio-card {
+  max-width: 310px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 17px 18px 12px 18px;
+  box-sizing: border-box;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 2px 14px rgba(59,161,218,0.13);
+  border: 1.5px solid #bbe0fe;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  position: relative;
+}
+@media (max-width: 900px) {
+  .mini-anuncios-cards {
+    grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+    gap: 15px;
+    max-width: 99vw;
+  }
+  .mini-anuncio-card {
+    max-width: 99vw;
+    padding: 14px 10px 10px 10px;
+  }
+}
+@media (max-width: 600px) {
+  .mini-anuncios-cards {
+    grid-template-columns: 1fr;
+    gap: 10px;
+    max-width: 99vw;
+  }
+  .mini-anuncio-card {
+    max-width: 99vw;
+    padding: 10px 5px;
+  }
+}
+/* Fuerza el layout del padre para que el grid sea compacto y centrado */
+.bloque-central, .ast-container, .container, main, section {
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  max-width: 100vw !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+  background: none !important;
+  border: none !important;
+  display: block !important;
+}
+
+.mini-anuncios-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 22px;
+  max-width: 1100px;
+  margin: 0 auto 30px auto;
+  width: 100%;
+  box-sizing: border-box;
+  justify-items: stretch;
+  align-items: stretch;
+  padding: 0;
+}
+.mini-anuncio-card {
+  max-width: 310px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 17px 18px 12px 18px;
+  box-sizing: border-box;
+  /* ...otros estilos... */
+}
+
+.mini-anuncios-cards {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 22px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+@media (max-width: 1100px) {
+  .mini-anuncios-cards {
+    grid-template-columns: repeat(2, 1fr);
+    max-width: 99vw;
+  }
+}
+@media (max-width: 700px) {
+  .mini-anuncios-cards {
+    grid-template-columns: 1fr;
+  }
+}
+
+.google-pin-icon {
+    width: 24px;
+    height: 24px;
+    display: inline-block;
+    vertical-align: middle;
+}
+.btn-mapa-zoom {
+    background: none;
+    border: none;
+    padding: 0;
+    margin: 0;
+    cursor: pointer;
+    outline: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.mini-anuncio-avatar {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    object-fit: cover;
+    display: block;
+}
+
+/* Select destacado dentro instrucciones */
+.mapa-instrucciones-usuario .pd-form-group select#categoria-selector {
+  background: #fff !important;
+  border: 2px solid #1a73e8 !important;
+  box-shadow: 0 2px 12px rgba(26,115,232,0.08);
+  font-size: 1.15em;
+  font-weight: 600;
+  padding: 10px 16px;
+  color: #222;
+  margin-top: 6px;
+  border-radius: 6px;
+  transition: border-color 0.2s;
+}
+.mapa-instrucciones-usuario .pd-form-group select#categoria-selector:focus {
+  border-color: #0051b4 !important;
+  outline: none;
+}
+
