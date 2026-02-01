@@ -173,7 +173,10 @@ function mostrar_mapa_shortcode($atts = []) {
     ?>
     <div class="bloque-central">
 
-        <?php if (!$is_provincia): ?>
+        <div class="mapa-interactivo-wrapper">
+            <div id="mapa-interactivo" style="height:500px;margin-bottom:10px;"></div>
+        </div>
+<?php if ($is_provincia): ?>
             <div class="pd-cta-top" style="margin-top: 20px;">
               ¿Buscas vivienda o plaza de garaje? <b>¡Anúnciate gratis y deja que propietarios e inmobiliarias te encuentren!</b>
               Recibe ofertas en la zona que deseas y elige la mejor opción para ti.
@@ -197,12 +200,6 @@ function mostrar_mapa_shortcode($atts = []) {
         <option value="Desean comprar plaza de garaje">Desean comprar plaza de garaje</option>
     </select>
 </div>
-        <?php endif; ?>
-
-        <div class="mapa-interactivo-wrapper">
-            <div id="mapa-interactivo" style="height:500px;margin-bottom:10px;"></div>
-        </div>
-<?php if ($is_provincia): ?>
 <div class="mapa-instrucciones-usuario">
   <div class="mapa-instrucciones-titulo">
     📝 ¡Publica tu anuncio en solo 3 pasos!
